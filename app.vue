@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex justify-center">
-    <div class="bg-[#F4EFE4] flex flex-col h-screen">
+    <div class="bg-[#F4EFE4] flex flex-col h-100">
       <img src="img/SPRINT_illu-03.png" class="head" alt="Sprint header" />
 
       <Title class="flex justify-center"></Title>
@@ -53,8 +53,11 @@
         </div>
       </div>
 
+      <br />
+      <br />
+
       <div class="bg-black h-24 text-white flex">
-        <div class="pl-4 pr-40 pt-5 text-sm">
+        <div class="pl-10 pr-40 pt-5 text-sm">
           A visualisation by Antoine Couturier, Antonio Morales and
           datacitron/Julie Brunet
         </div>
