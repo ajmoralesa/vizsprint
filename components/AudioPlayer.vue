@@ -18,6 +18,13 @@
           </div>
         </div>
         <p>{{ formatTime(audioDuration) }}</p>
+        <button class="pl-2" @click="restartAudio"><restart></restart></button>
+        <input
+          type="checkbox"
+          class="text-black"
+          v-model="isSelected"
+          @change="toggleSelection"
+        />
       </div>
     </div>
   </div>
@@ -27,24 +34,30 @@
 import { ref } from "vue";
 import play from "./icons/play.vue";
 import pause from "./icons/pause.vue";
+import restart from "./icons/restart.vue";
 
 const isPlaying = ref(false);
 const progress = ref(0);
 const currentTime = ref(0);
 const audioDuration = ref(0);
 
-// const props = defineProps(["audioFile", "muscle"]);
-
 const props = defineProps({
   audioFile: {
-    type: Object,
+    // type: Object,
     required: true,
   },
   muscle: {
-    type: String,
+    // type: String,
+    required: true,
+  },
+  selectedPlayers: {
+    type: Array,
     required: true,
   },
 });
+
+const audioElement = ref(null);
+const emits = defineEmits(["playbackToggled", "selectionChanged"]);
 
 function togglePlayback() {
   isPlaying.value = !isPlaying.value;
@@ -59,6 +72,8 @@ function togglePlayback() {
     console.log("Pausing:", props.audioFile);
     props.audioFile.pause();
   }
+
+  emits("playbackToggled", props.muscle, isPlaying.value);
 }
 
 function updateProgress() {
@@ -80,5 +95,32 @@ function formatTime(time) {
     seconds
   ).padStart(2, "0")}`;
   return formattedTime;
+}
+
+function restartAudio() {
+  // Restart the audio
+  currentTime.value = 0;
+  progress.value = 0;
+  props.audioFile.currentTime = 0;
+  togglePlayback();
+}
+
+// // Logic for multiple semection
+// const isSelected = computed(() => {
+//   return props.selectedPlayers.some((player) => player.muscle === props.muscle);
+// });
+
+// Method to toggle the selection
+function toggleSelection() {
+  if (isSelected.value) {
+    const index = props.selectedPlayers.indexOf(props.muscle);
+    if (index > -1) {
+      props.selectedPlayers.splice(index, 1);
+    }
+  } else {
+    props.selectedPlayers.push(props.muscle);
+  }
+
+  emits("selectionChanged", props.selectedPlayers);
 }
 </script>

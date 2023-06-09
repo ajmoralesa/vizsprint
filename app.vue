@@ -18,6 +18,9 @@
                 <AudioPlayer
                   :audio-file="audioMuscles[`${muscle.muscle}_right`]?.sound"
                   :muscle="audioMuscles[`${muscle.muscle}_right`]?.name"
+                  :selected-players="selectedPlayers"
+                  @selectionChanged="handleSelectionChanged"
+                  @playbackToggled="handlePlaybackToggled"
                 ></AudioPlayer>
               </template>
             </template>
@@ -56,6 +59,8 @@
       <br />
       <br />
 
+      <GlobalPlayer></GlobalPlayer>
+
       <div class="bg-black h-24 text-white flex">
         <div class="pl-10 pr-40 pt-5 text-sm">
           A visualisation by Antoine Couturier, Antonio Morales and
@@ -70,6 +75,7 @@
 import Title from "./components/Title.vue";
 import { reactive } from "vue";
 import AudioPlayer from "./components/AudioPlayer.vue";
+import GlobalPlayer from "./components/GlobalPlayer.vue";
 import l_bflh from "./assets/l_bflh.mp3";
 import l_bfsh from "./assets/l_bfsh.mp3";
 import l_gmax from "./assets/l_gmax.mp3";
@@ -203,6 +209,44 @@ onMounted(() => {
     };
   });
 });
+
+// Selected players
+const selectedPlayers = reactive([]);
+
+function handleCheckboxToggled(isSelected) {
+  console.log("Checkbox toggled:", isSelected);
+}
+
+function handleSelectionChanged(selectedPlayers) {
+  selectedPlayers = selectedPlayers;
+  console.log(selectedPlayers);
+}
+
+watch(selectedPlayers, (newPlayers, oldPlayers) => {
+  // Pause the sounds of players that are no longer selected
+  oldPlayers.forEach((player) => {
+    if (!newPlayers.some((newPlayer) => newPlayer.muscle === player.muscle)) {
+      player.audio.pause();
+    }
+  });
+
+  // Play the sounds of newly selected players
+  newPlayers.forEach((player) => {
+    if (!oldPlayers.some((oldPlayer) => oldPlayer.muscle === player.muscle)) {
+      player.audio.play();
+    }
+  });
+});
+
+function handlePlaybackToggled(muscle, isPlaying) {
+  const index = selectedPlayers.value.findIndex(
+    (player) => player.muscle === muscle
+  );
+
+  if (index > -1) {
+    selectedPlayers.value[index].isPlaying = isPlaying;
+  }
+}
 </script>
 
 <style scoped>
