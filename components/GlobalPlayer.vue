@@ -1,85 +1,162 @@
 <template>
   <div class="w-full flex justify-center">
     <div
-      class="relative w-full m-8 flex flex-col rounded-xl shadow-player-light bg-player-light-background border border-player-light-border dark:shadow-player-dark dark:bg-player-dark-background dark:border-player-dark-border dark:backdrop-blur-xl"
+      class="relative w-full m-8 flex flex-col rounded-xl shadow-player-light bg-player-light-background border border-player-light-border"
     >
-      <div class="w-full flex flex-col px-10 pb-6 pt-10 z-50">
-        <input
-          type="range"
-          id="song-percentage-played"
-          class="amplitude-song-slider mb-3"
-          step=".1"
-        />
-        <div class="flex w-full justify-between">
-          <span
-            class="amplitude-current-time text-xs font-sans tracking-wide font-medium text-sky-500 dark:text-sky-300"
-          ></span>
-          <span
-            class="amplitude-duration-time text-xs font-sans tracking-wide font-medium text-gray-500"
-          ></span>
-        </div>
-      </div>
-      <div
-        class="h-control-panel px-10 rounded-b-xl bg-control-panel-light-background border-t border-gray-200 flex items-center justify-center z-50 dark:bg-control-panel-dark-background dark:border-gray-900"
-      >
-        <div
-          class="cursor-pointer amplitude-play-pause w-24 h-24 rounded-full bg-white border border-play-pause-light-border shadow-xl flex items-center justify-center dark:bg-play-pause-dark-background dark:border-play-pause-dark-border"
-        >
+      <div class="flex w-full flex-row-reverse">
+        <button @click="closeComponent" class="pl-2 m-2">
           <svg
-            id="play-icon"
-            class="ml-[10px]"
-            width="31"
-            height="37"
-            viewBox="0 0 31 37"
-            fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            class="h-3 w-3 text-gray-700 hover:text-red-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M29.6901 16.6608L4.00209 0.747111C2.12875 -0.476923 0.599998 0.421814 0.599998 2.75545V33.643C0.599998 35.9728 2.12747 36.8805 4.00209 35.6514L29.6901 19.7402C29.6901 19.7402 30.6043 19.0973 30.6043 18.2012C30.6043 17.3024 29.6901 16.6608 29.6901 16.6608Z"
-              class="fill-slate-500 dark:fill-slate-400"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
             />
           </svg>
+        </button>
+      </div>
 
-          <svg
-            id="pause-icon"
-            width="24"
-            height="36"
-            viewBox="0 0 24 36"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect
-              width="6"
-              height="36"
-              rx="3"
-              class="fill-slate-500 dark:fill-slate-400"
-            />
-            <rect
-              x="18"
-              width="6"
-              height="36"
-              rx="3"
-              class="fill-slate-500 dark:fill-slate-400"
-            />
-          </svg>
+      <div class="w-full flex flex-col px-10 pb-6 pt-10 z-50">
+        <div class="relative bg-gray-300 h-2 mx-3 lg:w-96 rounded-lg">
+          <div
+            class="absolute left-0 bg-black h-full rounded-lg"
+            :style="{ width: progress + '%' }"
+          ></div>
         </div>
+        <div class="flex w-full mt-2 justify-between">
+          <span
+            class="amplitude-current-time text-xs font-sans tracking-wide font-medium"
+            >00:00</span
+          >
+          <span
+            class="amplitude-duration-time text-xs font-sans tracking-wide font-medium"
+            >{{ formatTime(audioDuration) }}</span
+          >
+        </div>
+      </div>
+
+      <div
+        class="h-control-panel px-10 rounded-b-xl bg-control-panel-light-background border-t border-gray-200 flex items-center justify-center z-50"
+      >
+        <button @click="playSubsetSounds">
+          <div
+            class="cursor-pointer amplitude-play-pause w-24 h-24 rounded-full bg-white border border-play-pause-light-border shadow-xl flex items-center justify-center"
+          >
+            <play v-if="!isPlaying"></play>
+            <pause v-else></pause>
+          </div>
+        </button>
+        <button class="pl-2" @click="restartAudio">
+          <restart class=""></restart>
+        </button>
       </div>
     </div>
   </div>
 </template>
 
+<script setup>
+import { ref } from "vue";
+import play from "./icons/playGlobal.vue";
+import pause from "./icons/pauseGlobal.vue";
+import restart from "./icons/restart.vue";
+
+const isPlaying = ref(false);
+const isPaused = ref(false);
+const progress = ref(0);
+const currentTime = ref(0);
+const audioDuration = ref(0);
+
+const props = defineProps({
+  audioFile: {
+    // type: Object,
+    required: true,
+  },
+  muscle: {
+    // type: String,
+    required: true,
+  },
+  subsetAudioMuscles: {
+    required: true,
+  },
+  selectedPlayers: {
+    required: true,
+  },
+});
+
+const emits = defineEmits(["selectionChanged"]);
+
+function playSubsetSounds() {
+  isPlaying.value = !isPlaying.value;
+  console.log("playing all!");
+
+  if (isPlaying.value) {
+    // Play the audio file
+    Object.values(props.subsetAudioMuscles).forEach((muscle) => {
+      muscle?.sound.play();
+    });
+    updateProgress();
+  } else {
+    Object.values(props.subsetAudioMuscles).forEach((muscle) => {
+      if (isPaused.value) {
+        muscle?.sound.pause();
+      } else {
+        currentTime.value = 0;
+        muscle?.sound.pause();
+      }
+    });
+  }
+}
+
+function updateProgress() {
+  const audio =
+    props.subsetAudioMuscles[Object.keys(props.subsetAudioMuscles)[0]].sound;
+
+  audioDuration.value = audio.duration;
+
+  // Call updateProgress recursively using requestAnimationFrame
+  if (isPlaying.value && currentTime.value < audioDuration.value) {
+    currentTime.value = audio.currentTime;
+    progress.value = (currentTime.value / audioDuration.value) * 100;
+
+    requestAnimationFrame(updateProgress);
+  } else if (!isPlaying.value && currentTime.value !== 0) {
+    currentTime.value = 0;
+    progress.value = 0;
+  }
+}
+
+function formatTime(time) {
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time % 60);
+  const formattedTime = `${String(minutes).padStart(2, "0")}:${String(
+    seconds
+  ).padStart(2, "0")}`;
+  return formattedTime;
+}
+
+function restartAudio() {
+  // Restart the audio
+  currentTime.value = 0;
+  progress.value = 0;
+  playSubsetSounds();
+}
+
+function closeComponent() {
+  console.log("closing this!");
+  for (const key in props.selectedPlayers) {
+    props.selectedPlayers[key] = false;
+  }
+  emits("selectionChanged", props.selectedPlayers);
+}
+</script>
+
 <style>
-/*
-! tailwindcss v3.0.23 | MIT License | https://tailwindcss.com
-*/
-
-/*
-1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
-2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
-*/
-
 *,
 ::before,
 ::after {

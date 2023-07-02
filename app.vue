@@ -1,4 +1,5 @@
 <template>
+  <!-- <parentcomponent></parentcomponent> -->
   <div class="w-full flex justify-center">
     <div class="bg-[#F4EFE4] flex flex-col h-100">
       <img src="img/SPRINT_illu-03.png" class="head" alt="Sprint header" />
@@ -7,6 +8,16 @@
       <h3 class="flex justify-center pt-2 text-black">
         Acceleration phase during a 40m sprint
       </h3>
+
+      <!-- <div>
+        <p>Length selected is {{ lenSelected }}</p>
+        <p>Subaudios: {{ subsetAudioMuscles }}</p>
+        <button @click="playSubsetSounds">Play subser</button>
+      </div> -->
+
+      <button @click="unSelectAll">Unselect All</button>
+      <ChildComponent ref="audioPlayer" />
+      <button @click="unselectAllCheckboxes">Unsssss</button>
 
       <div class="flex justify-center pt-6">
         <div class="px-8">
@@ -18,6 +29,7 @@
                 <AudioPlayer
                   :audio-file="audioMuscles[`${muscle.muscle}_right`]?.sound"
                   :muscle="audioMuscles[`${muscle.muscle}_right`]?.name"
+                  :side="muscle.side"
                   :selected-players="selectedPlayers"
                   @selectionChanged="handleSelectionChanged"
                   @playbackToggled="handlePlaybackToggled"
@@ -36,6 +48,10 @@
                 <AudioPlayer
                   :audio-file="audioMuscles[`${muscle.muscle}_right`]?.sound"
                   :muscle="audioMuscles[`${muscle.muscle}_right`]?.name"
+                  :side="muscle.side"
+                  :selected-players="selectedPlayers"
+                  @selectionChanged="handleSelectionChanged"
+                  @playbackToggled="handlePlaybackToggled"
                 ></AudioPlayer>
               </template>
             </template>
@@ -43,7 +59,7 @@
 
           <br />
 
-          <p>
+          <!-- <p>
             <span class="text-lg font-bold uppercase">Sprint</span>
             <span class="text-lg font-bold"> (both legs, all muscles)</span>
           </p>
@@ -52,14 +68,23 @@
               :audio-file="audioMuscles[`${all}_both`]?.sound"
               muscle="All muscles"
             ></AudioPlayer>
-          </div>
+          </div> -->
         </div>
       </div>
 
       <br />
       <br />
 
-      <GlobalPlayer></GlobalPlayer>
+      <div
+        v-if="selectedPlayers.length >= 2"
+        class="fixed bottom-0 left-0 right-0"
+      >
+        <GlobalPlayer
+          :subsetAudioMuscles="subsetAudioMuscles"
+          :selected-players="selectedPlayers"
+          @selectionChanged="handleSelectionChanged"
+        ></GlobalPlayer>
+      </div>
 
       <div class="bg-black h-24 text-white flex">
         <div class="pl-10 pr-40 pt-5 text-sm">
@@ -208,35 +233,52 @@ onMounted(() => {
       ...rest,
     };
   });
+
+  console.log("audiomuscles");
+  console.log(audioMuscles);
 });
 
-// Selected players
 const selectedPlayers = reactive([]);
-
-function handleCheckboxToggled(isSelected) {
-  console.log("Checkbox toggled:", isSelected);
-}
+const subsetAudioMuscles = ref({});
 
 function handleSelectionChanged(selectedPlayers) {
   selectedPlayers = selectedPlayers;
+  console.log(selectedPlayers.length);
   console.log(selectedPlayers);
 }
 
-watch(selectedPlayers, (newPlayers, oldPlayers) => {
-  // Pause the sounds of players that are no longer selected
-  oldPlayers.forEach((player) => {
-    if (!newPlayers.some((newPlayer) => newPlayer.muscle === player.muscle)) {
-      player.audio.pause();
-    }
-  });
+const lenSelected = ref(0);
+watch(selectedPlayers, () => {
+  lenSelected.value = Object.keys(selectedPlayers).length;
 
-  // Play the sounds of newly selected players
-  newPlayers.forEach((player) => {
-    if (!oldPlayers.some((oldPlayer) => oldPlayer.muscle === player.muscle)) {
-      player.audio.play();
+  const selectedPlayerNames = Object.values(selectedPlayers).map(
+    ({ muscle, side }) => {
+      return `${muscle}_${side}`;
     }
-  });
+  );
+
+  console.log("selectedPlayerNames");
+  console.log(selectedPlayers);
+  console.log(selectedPlayerNames);
+
+  // Create a subset of audioMuscles based on selectedPlayerNames
+  subsetAudioMuscles.value = Object.keys(audioMuscles).reduce((acc, key) => {
+    const muscle = audioMuscles[key];
+    const muscleIdentifier = `${muscle.name}_${muscle.side}`;
+
+    if (selectedPlayerNames.includes(muscleIdentifier)) {
+      acc[key] = muscle;
+    }
+    return acc;
+  }, {});
 });
+
+function playSubsetSounds() {
+  console.log("playing all!");
+  Object.values(subsetAudioMuscles.value).forEach((muscle) => {
+    muscle?.sound.play();
+  });
+}
 
 function handlePlaybackToggled(muscle, isPlaying) {
   const index = selectedPlayers.value.findIndex(
@@ -246,6 +288,20 @@ function handlePlaybackToggled(muscle, isPlaying) {
   if (index > -1) {
     selectedPlayers.value[index].isPlaying = isPlaying;
   }
+}
+
+function unSelectAll() {
+  selectedPlayers.splice(0, selectedPlayers.length);
+}
+
+const audioPlayer = ref(null);
+
+function unselectAllCheckboxes() {
+  const checkboxes = audioPlayer.value.$refs.checkbox;
+
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = false;
+  });
 }
 </script>
 

@@ -18,13 +18,17 @@
           </div>
         </div>
         <p>{{ formatTime(audioDuration) }}</p>
-        <button class="pl-2" @click="restartAudio"><restart></restart></button>
-        <input
-          type="checkbox"
-          class="text-black"
-          v-model="isSelected"
-          @change="toggleSelection"
-        />
+        <div class="flex items-center">
+          <button class="pl-2" @click="restartAudio">
+            <restart></restart>
+          </button>
+          <input
+            type="checkbox"
+            class="ml-2 w-4 h-4 bg-gray-400 border-transparent focus:border-transparent focus:bg-gray-300 text-black focus:ring-1 focus:ring-offset-2 focus:ring-gray-400 rounded"
+            v-model="isSelected"
+            @change="toggleSelection"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -48,6 +52,9 @@ const props = defineProps({
   },
   muscle: {
     // type: String,
+    required: true,
+  },
+  side: {
     required: true,
   },
   selectedPlayers: {
@@ -110,15 +117,35 @@ function restartAudio() {
 //   return props.selectedPlayers.some((player) => player.muscle === props.muscle);
 // });
 
-// Method to toggle the selection
+const isSelected = ref(false);
+
+// // Method to toggle the selection
+// function toggleSelection() {
+//   if (!isSelected.value) {
+//     const index = props.selectedPlayers.indexOf(props.muscle);
+//     if (index > -1) {
+//       props.selectedPlayers.splice(index, 1);
+//     }
+//   } else {
+//     props.selectedPlayers.push(props.muscle);
+//   }
+
+//   emits("selectionChanged", props.selectedPlayers);
+// }
+
 function toggleSelection() {
-  if (isSelected.value) {
-    const index = props.selectedPlayers.indexOf(props.muscle);
+  const { muscle, side } = props;
+  const selectedPlayer = { muscle, side };
+
+  if (!isSelected.value) {
+    const index = props.selectedPlayers.findIndex(
+      (player) => player.muscle === muscle && player.side === side
+    );
     if (index > -1) {
       props.selectedPlayers.splice(index, 1);
     }
   } else {
-    props.selectedPlayers.push(props.muscle);
+    props.selectedPlayers.push(selectedPlayer);
   }
 
   emits("selectionChanged", props.selectedPlayers);

@@ -15,6 +15,7 @@
     "sass": "^1.62.1"
   },
   "dependencies": {
+    "@tailwindcss/forms": "^0.5.3",
     "howler": "^2.2.3"
   }
 }
