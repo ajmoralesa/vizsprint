@@ -71,8 +71,10 @@
 
       <div v-if="selectedPlayers.length >= 2" class="h-20"></div>
 
-      <div class="bg-black h-full w-full text-white flex flex-row items-center">
-        <div class="pl-10 pr-30 ml-5 py-10 w-48 pt-5 text-sm">
+      <div
+        class="bg-black h-full w-full text-white flex flex-row items-center md:w-96"
+      >
+        <div class="pl-10 pr-30 ml-5 py-10 w-48 md:w-96 pt-5 text-sm">
           A visualisation by Antoine Couturier, Antonio Morales and
           datacitron/Julie Brunet
         </div>
