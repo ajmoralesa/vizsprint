@@ -2,11 +2,7 @@
   <!-- <parentcomponent></parentcomponent> -->
   <div class="w-full flex justify-center">
     <div class="bg-[#F4EFE4] flex flex-col h-100">
-      <img
-        src="./public/img/SPRINT_illu-03.png"
-        class="head"
-        alt="Sprint header"
-      />
+      <img src="/img/SPRINT_illu-03.png" class="head" alt="Sprint header" />
 
       <Title class="flex justify-center"></Title>
       <h3 class="flex justify-center pt-2 text-black">
@@ -104,23 +100,23 @@ import Title from "./components/Title.vue";
 import { reactive } from "vue";
 import AudioPlayer from "./components/AudioPlayer.vue";
 import GlobalPlayer from "./components/GlobalPlayer.vue";
-import l_bflh from "./assets/l_bflh.mp3";
-import l_bfsh from "./assets/l_bfsh.mp3";
-import l_gmax from "./assets/l_gmax.mp3";
-import l_gmed from "./assets/l_gmed.mp3";
-import l_rf from "./assets/l_rf.mp3";
-import l_sm from "./assets/l_sm.mp3";
-import l_st from "./assets/l_st.mp3";
-import l_vl from "./assets/l_vl.mp3";
-import r_bflh from "./assets/r_bflh.mp3";
-import r_bfsh from "./assets/r_bfsh.mp3";
-import r_gmax from "./assets/r_gmax.mp3";
-import r_gmed from "./assets/r_gmed.mp3";
-import r_rf from "./assets/r_rf.mp3";
-import r_sm from "./assets/r_sm.mp3";
-import r_st from "./assets/r_st.mp3";
-import r_vl from "./assets/r_vl.mp3";
-import sprint from "./assets/r_vl.mp3";
+import l_bflh from "~/assets/l_bflh.mp3";
+import l_bfsh from "~/assets/l_bfsh.mp3";
+import l_gmax from "~/assets/l_gmax.mp3";
+import l_gmed from "~/assets/l_gmed.mp3";
+import l_rf from "~/assets/l_rf.mp3";
+import l_sm from "~/assets/l_sm.mp3";
+import l_st from "~/assets/l_st.mp3";
+import l_vl from "~/assets/l_vl.mp3";
+import r_bflh from "~/assets/r_bflh.mp3";
+import r_bfsh from "~/assets/r_bfsh.mp3";
+import r_gmax from "~/assets/r_gmax.mp3";
+import r_gmed from "~/assets/r_gmed.mp3";
+import r_rf from "~/assets/r_rf.mp3";
+import r_sm from "~/assets/r_sm.mp3";
+import r_st from "~/assets/r_st.mp3";
+import r_vl from "~/assets/r_vl.mp3";
+import sprint from "~/assets/r_vl.mp3";
 
 const audioMuscles = reactive({});
 
