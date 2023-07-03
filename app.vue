@@ -54,19 +54,7 @@
               </template>
             </template>
           </div>
-
           <br />
-
-          <!-- <p>
-            <span class="text-lg font-bold uppercase">Sprint</span>
-            <span class="text-lg font-bold"> (both legs, all muscles)</span>
-          </p>
-          <div class="flex-grow">
-            <AudioPlayer
-              :audio-file="audioMuscles[`${all}_both`]?.sound"
-              muscle="All muscles"
-            ></AudioPlayer>
-          </div> -->
         </div>
       </div>
 

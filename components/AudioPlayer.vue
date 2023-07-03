@@ -10,7 +10,7 @@
       <div class="flex">
         <p>{{ formatTime(currentTime) }}</p>
         <div class="flex items-center space-x-2">
-          <div class="relative bg-gray-300 h-1 mx-3 w-52 lg:w-96">
+          <div class="relative bg-gray-300 h-1 mx-3 w-40 lg:w-96">
             <div
               class="absolute left-0 bg-black h-full"
               :style="{ width: progress + '%' }"
