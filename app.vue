@@ -14,9 +14,6 @@
         <button @click="playSubsetSounds">Play subser</button>
       </div> -->
 
-      <button @click="unSelectAll">Unselect All</button>
-      <button @click="unselectAllCheckboxes">Unsssss</button>
-
       <div class="flex justify-center pt-6">
         <div class="px-8">
           <h3 class="text-lg font-bold uppercase">Right Leg</h3>

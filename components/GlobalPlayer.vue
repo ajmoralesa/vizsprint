@@ -7,7 +7,7 @@
         <button @click="closeComponent" class="pl-2 m-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-3 w-3 text-gray-700 hover:text-red-500"
+            class="h-5 w-5 text-gray-700 hover:text-red-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -149,9 +149,7 @@ function restartAudio() {
 
 function closeComponent() {
   console.log("closing this!");
-  for (const key in props.selectedPlayers) {
-    props.selectedPlayers[key] = false;
-  }
+  props.selectedPlayers.splice(0, props.selectedPlayers.length);
   emits("selectionChanged", props.selectedPlayers);
 }
 </script>
