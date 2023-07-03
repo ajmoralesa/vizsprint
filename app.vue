@@ -1,5 +1,4 @@
 <template>
-  <!-- <parentcomponent></parentcomponent> -->
   <div class="w-full flex justify-center">
     <div class="bg-[#F4EFE4] flex flex-col h-100">
       <img src="/img/SPRINT_illu-03.png" class="head" alt="Sprint header" />
@@ -85,11 +84,14 @@
         ></GlobalPlayer>
       </div>
 
-      <div class="bg-black h-24 text-white flex">
-        <div class="pl-10 pr-40 pt-5 text-sm">
+      <div class="bg-black h-full w-full text-white flex flex-row items-center">
+        <div class="pl-10 pr-30 ml-5 py-10 w-48 pt-5 text-sm">
           A visualisation by Antoine Couturier, Antonio Morales and
           datacitron/Julie Brunet
         </div>
+
+        <img class="h-14" src="/img/fulgur_logo.png" alt="Fulgur Logo" />
+        <img class="h-14 pl-4" src="/img/insep_logo.png" alt="" />
       </div>
     </div>
   </div>
