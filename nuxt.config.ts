@@ -6,8 +6,8 @@ export default defineNuxtConfig({
       rollupOptions: {
         output: {
           assetFileNames: "sprint.wav",
-          chunkFileNames: "[name].[ext]",
-          entryFileNames: "[name].[ext]",
+          // chunkFileNames: "[name].[ext]",
+          // entryFileNames: "[name].[ext]",
         },
       },
     },

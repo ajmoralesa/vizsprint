@@ -2,7 +2,11 @@
   <!-- <parentcomponent></parentcomponent> -->
   <div class="w-full flex justify-center">
     <div class="bg-[#F4EFE4] flex flex-col h-100">
-      <img src="img/SPRINT_illu-03.png" class="head" alt="Sprint header" />
+      <img
+        src="./public/img/SPRINT_illu-03.png"
+        class="head"
+        alt="Sprint header"
+      />
 
       <Title class="flex justify-center"></Title>
       <h3 class="flex justify-center pt-2 text-black">
@@ -16,7 +20,6 @@
       </div> -->
 
       <button @click="unSelectAll">Unselect All</button>
-      <ChildComponent ref="audioPlayer" />
       <button @click="unselectAllCheckboxes">Unsssss</button>
 
       <div class="flex justify-center pt-6">
