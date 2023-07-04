@@ -23,7 +23,7 @@
       </div>
 
       <div class="w-full flex flex-col px-10 pb-6 pt-10 z-50">
-        <div class="relative bg-gray-300 h-2 mx-3 lg:w-96 rounded-lg">
+        <div class="relative bg-gray-300 h-2 mx-3 lg:w-full rounded-lg">
           <div
             class="absolute left-0 bg-black h-full rounded-lg"
             :style="{ width: progress + '%' }"
