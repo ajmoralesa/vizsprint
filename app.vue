@@ -41,8 +41,8 @@
             <template v-for="muscle in muscles">
               <template v-if="muscle.side === 'Left'">
                 <AudioPlayer
-                  :audio-file="audioMuscles[`${muscle.muscle}_right`]?.sound"
-                  :muscle="audioMuscles[`${muscle.muscle}_right`]?.name"
+                  :audio-file="audioMuscles[`${muscle.muscle}_left`]?.sound"
+                  :muscle="audioMuscles[`${muscle.muscle}_left`]?.name"
                   :side="muscle.side"
                   :selected-players="selectedPlayers"
                   @selectionChanged="handleSelectionChanged"
