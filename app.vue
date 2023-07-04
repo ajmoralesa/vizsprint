@@ -8,12 +8,6 @@
         Acceleration phase during a 40m sprint
       </h3>
 
-      <!-- <div>
-        <p>Length selected is {{ lenSelected }}</p>
-        <p>Subaudios: {{ subsetAudioMuscles }}</p>
-        <button @click="playSubsetSounds">Play subser</button>
-      </div> -->
-
       <div class="flex justify-center pt-6">
         <div class="px-8">
           <h3 class="text-lg font-bold uppercase">Right Leg</h3>
@@ -28,6 +22,7 @@
                   :selected-players="selectedPlayers"
                   @selectionChanged="handleSelectionChanged"
                   @playbackToggled="handlePlaybackToggled"
+                  :key="componentKey"
                 ></AudioPlayer>
               </template>
             </template>
@@ -292,6 +287,14 @@ function unselectAllCheckboxes() {
   checkboxes.forEach((checkbox) => {
     checkbox.checked = false;
   });
+}
+
+// Force reload of childcomponent
+const componentKey = ref(0);
+function refreshChildComponent() {
+  console.log("heyyyyyyyyyyyyyyyyyyyyyyyy");
+  // Update the key value to trigger the refresh
+  componentKey.value += 1;
 }
 </script>
 
