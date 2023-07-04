@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.5.3",
-    "howler": "^2.2.3"
+    "howler": "^2.2.3",
+    "standardized-audio-context": "^25.3.53"
   }
 }

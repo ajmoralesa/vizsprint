@@ -151,6 +151,9 @@ function closeComponent() {
   console.log("closing this!");
   props.selectedPlayers.splice(0, props.selectedPlayers.length);
   emits("selectionChanged", props.selectedPlayers);
+
+  // Reload page to force unselect
+  window.location.reload();
 }
 </script>
 

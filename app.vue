@@ -107,7 +107,6 @@ import r_rf from "~/assets/r_rf.mp3";
 import r_sm from "~/assets/r_sm.mp3";
 import r_st from "~/assets/r_st.mp3";
 import r_vl from "~/assets/r_vl.mp3";
-import sprint from "~/assets/r_vl.mp3";
 
 const audioMuscles = reactive({});
 
@@ -208,18 +207,38 @@ const muscles = [
     muscle: "vl",
     name: "Vastus Lateralis",
   },
-  {
-    sound: sprint,
-    side: "Both",
-    muscle: "All",
-    name: "All muscles",
-  },
 ];
 
+// onMounted(() => {
+//   muscles.forEach(({ sound, ...rest }) => {
+//     audioMuscles[`${rest.muscle}_${rest.side.toLowerCase()}`] = {
+//       sound: new Audio(sound),
+//       ...rest,
+//     };
+//   });
+
+//   console.log("audiomuscles");
+//   console.log(audioMuscles);
+// });
+
 onMounted(() => {
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
   muscles.forEach(({ sound, ...rest }) => {
+    const audioElement = new Audio();
+    audioElement.src = sound;
+
+    const audioSource = audioContext.createMediaElementSource(audioElement);
+    const panner = audioContext.createStereoPanner();
+    audioSource.connect(panner);
+    panner.connect(audioContext.destination);
+
+    panner.pan.value = -1; // Set the left stereo channel
+
     audioMuscles[`${rest.muscle}_${rest.side.toLowerCase()}`] = {
-      sound: new Audio(sound),
+      sound: audioElement,
+      source: audioSource,
+      panner: panner,
       ...rest,
     };
   });
